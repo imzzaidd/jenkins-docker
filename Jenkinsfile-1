@@ -1,14 +1,16 @@
 pipeline {
     agent {
         docker {
-            image 'node:16-alpine'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            image 'docker:20.10.11'  // Imagen oficial de Docker con la versión específica
+            args '-v /var/run/docker.sock:/var/run/docker.sock'  // Montar el socket de Docker para interactuar con el host Docker
         }
     }
     stages {
-        stage('Test') {
+        stage('Build') {
             steps {
-                sh 'node --version'
+                sh 'docker pull node:16-alpine'
+                sh 'docker build -t my-node-app .'
+                sh 'docker push my-node-app'
             }
         }
     }
